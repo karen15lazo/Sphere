@@ -2,7 +2,7 @@
 #include <GL/glut.h>
 #include <stdlib.h>
 
-int a, b, c, d;
+int m, n, a, b, e, f, c, d, estado;
 float mat_ambient[] ={ 0.0f,0.1f,0.06f ,1.0f};
 float mat_diffuse[] ={ 0.0f,0.50980392f,0.50980392f,1.0f};
 float mat_specular[] ={0.50196078f,0.50196078f,0.50196078f,1.0f };
@@ -33,7 +33,6 @@ void reshape(int w, int h)
     glLoadIdentity();
 
 }
-
 void display(void)
 {
    
@@ -46,20 +45,20 @@ void display(void)
     glRotated(45,0.0,1.0,0.0);
     glRotated(45,0.0,0.0,1.0);
     glLoadIdentity();
-    // Dibujamos la esfera y le aplicamos el material
+    // Dibujamos una esfera y le aplicamos el material
     glPushMatrix();
-    
+   
     glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
     glMaterialfv(GL_FRONT, GL_SHININESS, shine);
-    glutSolidSphere(8.0,200.0,200.0);
+    glutSolidSphere(10.0,100.0,100.0);
     glFlush();
 }
 
 
 void keyboard(unsigned char key, int x, int y)
-{ 
+{   
     switch (key)
     {
 	case 'C':
@@ -133,7 +132,41 @@ void keyboard(unsigned char key, int x, int y)
     }
     glutPostRedisplay();
 }
-
+//Deteccion de clic con el mouse
+void raton(int cu, int state, int x, int y)
+    {
+        int e, f;
+        if(cu == 0)
+        {
+            if(state == GLUT_UP)
+            {
+                c = c + a;
+                d = d + b;
+            }
+        }
+    }
+//Moviendo el foco 
+void mov(int x, int y)
+    {
+        if(estado == 0)
+        {
+            estado = 1;
+            e = x;
+            f = y;
+        }
+        a = x - e;
+        b = y - f;
+        glutPostRedisplay();
+    }
+//Posicion inicial del foco 
+void stop(int x, int y)
+    {
+        m = x;
+        n = y;
+        estado = 0;
+        a = 0;
+        b = 0;
+    }
 // Main del programa.
 int main(int argc, char **argv)
 {
@@ -152,6 +185,9 @@ int main(int argc, char **argv)
 
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
+    glutMouseFunc(raton);
+    glutPassiveMotionFunc(stop);
+    glutMotionFunc(mov);
     glutKeyboardFunc(keyboard);
     glutMainLoop();
 
